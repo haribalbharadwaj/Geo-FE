@@ -1,0 +1,38 @@
+{
+  "name": "geo-data-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fawmi/vue-google-maps": "^0.9.79",
+    "@mapbox/corslite": "^0.0.7",
+    "@mapbox/leaflet-omnivore": "^0.3.4",
+    "@mapbox/togeojson": "^0.16.2",
+    "@vuelidate/core": "^2.0.3",
+    "@vuelidate/validators": "^2.0.4",
+    "axios": "^1.7.9",
+    "brfs": "^2.0.2",
+    "leaflet": "^1.9.4",
+    "leaflet-draw": "^1.0.4",
+    "leaflet-geotiff": "^0.2.0",
+    "leaflet-measure": "^3.1.0",
+    "leaflet-omnivore": "^0.3.4",
+    "mapbox-gl": "^3.9.2",
+    "pinia": "^2.3.0",
+    "static-module": "^3.0.4",
+    "vee-validate": "^4.15.0",
+    "vue": "^3.5.13",
+    "vue-router": "^4.0.13",
+    "vue2-google-maps": "^0.10.7",
+    "vue3-leaflet": "^1.0.50"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "vite": "^6.0.5"
+  }
+}
