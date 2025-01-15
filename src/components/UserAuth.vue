@@ -1,6 +1,5 @@
-<template>
+<template> 
   <div class="auth-container">
-    <!-- Heading for the application -->
     <h1 class="app-heading">GeoSpatial Data Application</h1>
 
     <div class="auth-box">
@@ -48,6 +47,9 @@
 
 <script>
 import axios from 'axios';
+import L from 'leaflet';
+import omnivore from '@mapbox/leaflet-omnivore';
+
 
 export default {
   data() {
@@ -66,60 +68,67 @@ export default {
     },
 
     async handleSubmit() {
-      try {
-        const url = this.isLogin
-          ? 'https://geo-be.onrender.com/api/users/login'
-          : 'https://geo-be.onrender.com/api/users/register';
-        const response = await axios.post(url, this.user);
-        console.log('User authenticated:', response.data);
+  try {
+    const url = this.isLogin
+      ? 'https://geo-be.onrender.com/api/users/login'
+      : 'https://geo-be.onrender.com/api/users/register';
+    const response = await axios.post(url, this.user);
+    console.log('User authenticated:', response.data);
 
-        // Clear any existing error message after successful registration or login
-        this.errorMessage = ''; 
-        
-        if (!this.isLogin) {
-          // Show success message after successful registration
-          this.successMessage = 'User registered successfully. You can now log in.';
-        } else {
-          // Save token to localStorage and redirect to upload page
-          localStorage.setItem('authToken', response.data.token);
-          this.$router.push('/upload'); // Redirect to upload page after login
-        }
-      } catch (error) {
-        console.error('Error authenticating:', error);
-        if (error.response) {
-          this.errorMessage = error.response.data.error || 'An error occurred';
-        } else {
-          this.errorMessage = 'Network or server error';
-        }
-        // Clear success message on error
-        this.successMessage = '';
-      }
+    // Clear any existing error message after successful registration or login
+    this.errorMessage = ''; 
+    
+    if (!this.isLogin) {
+      // Show success message after successful registration
+      this.successMessage = 'User registered successfully. You can now log in.';
+    } else {
+      // Save token to localStorage and redirect to upload page
+      localStorage.setItem('authToken', response.data.token);
+      console.log(localStorage.getItem('token'));
+      this.$router.push('/upload'); // Redirect to upload page after login
+
+      // Optionally, trigger a route reload to force the application state to update
+      this.$router.go(0); // Reloads the app after pushing the new route
     }
+  } catch (error) {
+    console.error('Error authenticating:', error);
+    if (error.response) {
+      console.error('Error response:', error.response.data); // Log error response
+      this.errorMessage = error.response.data.error || 'An error occurred';
+    } else {
+      this.errorMessage = 'Network or server error';
+    }
+
+    // Clear success message on error
+    this.successMessage = '';
+  }
+}
+
+    
   },
 };
 </script>
 
 <style scoped>
-.auth-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f4f7fc;
-  font-family: 'Arial', sans-serif;
-  flex-direction: column;
-}
 
-/* Heading styling for GeoSpatial Data Application */
 .app-heading {
   font-size: 2.5rem;
   font-weight: 700;
   color: #4A90E2;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   text-align: center;
 }
 
-/* Auth box styling */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; /* Aligning elements vertically */
+  height: 100vh;
+  background-color: #f4f7fc;
+  font-family: 'Arial', sans-serif;
+}
+
 .auth-box {
   background: white;
   padding: 30px;
@@ -130,14 +139,12 @@ export default {
   text-align: center;
 }
 
-/* Login/Register title */
 h2 {
   margin-bottom: 20px;
   font-size: 24px;
   color: #333;
 }
 
-/* Input fields styling */
 .input-field {
   width: 100%;
   padding: 12px;
@@ -147,7 +154,6 @@ h2 {
   font-size: 16px;
 }
 
-/* Submit button styling */
 .submit-btn {
   width: 100%;
   padding: 12px;
@@ -164,7 +170,6 @@ h2 {
   background-color: #0056b3;
 }
 
-/* Toggle between login/register links */
 .toggle-auth {
   margin-top: 15px;
   color: #007bff;
@@ -176,7 +181,6 @@ h2 {
   text-decoration: underline;
 }
 
-/* Error and success messages */
 .error-message {
   margin-top: 10px;
   color: red;
