@@ -63,15 +63,18 @@ watch(() => props.uploadedFiles, (newFiles) => {
 // Load the uploaded file to the map
 const loadFile = (fileUrl) => {
   drawnItems.value.clearLayers();
-
+  
+  let fileLayer;
   if (fileUrl.endsWith('.geojson')) {
-    omnivore.geojson(fileUrl).addTo(drawnItems.value);
+    fileLayer = omnivore.geojson(fileUrl);
   } else if (fileUrl.endsWith('.kml')) {
-    omnivore.kml(fileUrl).addTo(drawnItems.value);
+    fileLayer = omnivore.kml(fileUrl);
   } else if (fileUrl.endsWith('.tiff') || fileUrl.endsWith('.tif')) {
-    L.leafletGeotiff(fileUrl).addTo(drawnItems.value);
+    fileLayer = L.leafletGeotiff(fileUrl);
   }
+  fileLayer.addTo(drawnItems.value);  // Ensure the file layer is added to drawnItems
 };
+
 
 // On component mount, initialize the map and fetch saved maps
 onMounted(() => {
@@ -123,6 +126,8 @@ const saveMap = () => {
   console.log('GeoJSON Data:', geoJSONData);
 
   if (geoJSONData.features.length > 0) {
+
+    const action = confirm("Do you want to update the existing map? Click 'Cancel' to create a new one.");
     const saveUrl = currentMapId.value
       ? `https://geo-be.onrender.com/api/files/update/${currentMapId.value}` // Update existing map
       : 'https://geo-be.onrender.com/api/files/save'; // Create new map

@@ -68,7 +68,7 @@ export default {
       });
 
       this.errorMessage = `File uploaded successfully: ${response.data.fileUrl}`;
-      this.$emit('file-uploaded');
+      this.$emit('file-uploaded', response.data.fileUrl);
     } catch (error) {
       console.log('Upload error:', error); // Log the full error response for debugging
       this.errorMessage = error.response?.data?.error || 'Error uploading file';
