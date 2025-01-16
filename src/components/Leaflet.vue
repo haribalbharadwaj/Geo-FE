@@ -127,7 +127,9 @@ const saveMap = () => {
       ? `https://geo-be.onrender.com/api/files/update/${currentMapId.value}` // Update existing map
       : 'https://geo-be.onrender.com/api/files/save'; // Create new map
 
-    axios.post(saveUrl, { mapData: geoJSONData }, { headers })
+      const filename = prompt("Enter a filename for the map", "unnamed-map");
+
+    axios.post(saveUrl, { mapData: geoJSONData,filename }, { headers })
       .then((response) => {
         console.log('Map saved successfully:', response.data);
         currentMapId.value = response.data._id; // Update the current map ID
