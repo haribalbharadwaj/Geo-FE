@@ -1,13 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import UserAuth from '../components/UserAuth.vue';
 import FileUpload from '../components/FileUpload.vue';
-import MapView from '../components/MapView.vue';
 
 const routes = [
   { path: '/', component: UserAuth }, // Login or Register page
   { path: '/login', alias: '/', component: UserAuth }, // Alias for login page
   { path: '/upload', component: FileUpload, meta: { requiresAuth: true } }, // File upload page
-  { path: '/map', component: MapView, meta: { requiresAuth: true } }, // Map page
 ];
 
 

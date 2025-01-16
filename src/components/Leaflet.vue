@@ -63,17 +63,30 @@ watch(() => props.uploadedFiles, (newFiles) => {
 // Load the uploaded file to the map
 const loadFile = (fileUrl) => {
   drawnItems.value.clearLayers();
-  
+
   let fileLayer;
   if (fileUrl.endsWith('.geojson')) {
     fileLayer = omnivore.geojson(fileUrl);
   } else if (fileUrl.endsWith('.kml')) {
     fileLayer = omnivore.kml(fileUrl);
   } else if (fileUrl.endsWith('.tiff') || fileUrl.endsWith('.tif')) {
-    fileLayer = L.leafletGeotiff(fileUrl);
+    // Add TIFF file handling using leaflet-geotiff
+    fileLayer = L.leafletGeotiff(fileUrl, {
+      renderer: L.LeafletGeotiff.plotty(),  // Using the plotty renderer for TIFF files
+      band: 0,  // Specify the band to be rendered (if multi-band TIFF)
+      noDataValue: -9999,  // Handle missing data values
+      clampLow: false,
+      clampHigh: false,
+    });
   }
-  fileLayer.addTo(drawnItems.value);  // Ensure the file layer is added to drawnItems
+  
+  if (fileLayer) {
+    fileLayer.addTo(drawnItems.value);  // Ensure the file layer is added to drawnItems
+  } else {
+    console.error('Unsupported file format or failed to load the file.');
+  }
 };
+
 
 
 // On component mount, initialize the map and fetch saved maps
